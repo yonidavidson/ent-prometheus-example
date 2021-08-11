@@ -8,6 +8,7 @@ import (
 	"entprom/ent"
 	"entprom/entprom"
 
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
@@ -52,4 +53,3 @@ func main() {
 	// Run the server
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
-
