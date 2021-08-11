@@ -57,14 +57,21 @@ func Hook() ent.Hook {
 	opsDuration := initOpsDuration()
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			// Before mutation, start measuring time.
 			start := time.Now()
+			// Extract dynamic labels from mutation.
 			labels := prometheus.Labels{mutationType: m.Type(), mutationOp: m.Op().String()}
+			// Increment total ops counter.
 			opsProcessedTotal.With(labels).Inc()
+			// Execute mutation.
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
+				// In case of error increment error counter.
 				opsProcessedError.With(labels).Inc()
 			}
+			// Stop time measure.
 			duration := time.Since(start)
+			// Record duration in seconds.
 			opsDuration.With(labels).Observe(duration.Seconds())
 			return v, err
 		})
