@@ -17,47 +17,44 @@ const (
 
 var entLabels = []string{mutationType, mutationOp}
 
-// Create collector for total operations counter
-func initOpsProcessedTotal(constLabels prometheus.Labels) *prometheus.CounterVec {
+// Create a collector for total operations counter
+func initOpsProcessedTotal() *prometheus.CounterVec {
 	return promauto.NewCounterVec(
 		prometheus.CounterOpts{
-			Name:        "ent_operation_total",
-			Help:        "Number of ent mutation operations",
-			ConstLabels: constLabels,
+			Name: "ent_operation_total",
+			Help: "Number of ent mutation operations",
 		},
 		entLabels,
 	)
 }
 
-// Create collector for error counter
-func initOpsProcessedError(constLabels prometheus.Labels) *prometheus.CounterVec {
+// Create a collector for error counter
+func initOpsProcessedError() *prometheus.CounterVec {
 	return promauto.NewCounterVec(
 		prometheus.CounterOpts{
-			Name:        "ent_operation_error",
-			Help:        "Number of failed ent mutation operations",
-			ConstLabels: constLabels,
+			Name: "ent_operation_error",
+			Help: "Number of failed ent mutation operations",
 		},
 		entLabels,
 	)
 }
 
-// Create collector for duration histogram collector
-func initOpsDuration(constLabels prometheus.Labels) *prometheus.HistogramVec {
+// Create a collector for duration histogram collector
+func initOpsDuration() *prometheus.HistogramVec {
 	return promauto.NewHistogramVec(
 		prometheus.HistogramOpts{
-			Name:        "ent_operation_duration_seconds",
-			Help:        "Time in seconds per operation",
-			ConstLabels: constLabels,
+			Name: "ent_operation_duration_seconds",
+			Help: "Time in seconds per operation",
 		},
 		entLabels,
 	)
 }
 
 // Hook init collectors, count total at beginning error on mutation error and duration also after.
-func Hook(constLabels prometheus.Labels) ent.Hook {
-	opsProcessedTotal := initOpsProcessedTotal(constLabels)
-	opsProcessedError := initOpsProcessedError(constLabels)
-	opsDuration := initOpsDuration(constLabels)
+func Hook() ent.Hook {
+	opsProcessedTotal := initOpsProcessedTotal()
+	opsProcessedError := initOpsProcessedError()
+	opsDuration := initOpsDuration()
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			start := time.Now()

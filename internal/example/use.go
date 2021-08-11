@@ -11,6 +11,6 @@ func main() {
 	// Add a hook only on user mutations.
 	client.User.Use(exampleHook())
 
-	//// Add a hook only on update operations.
+	// Add a hook only on update operations.
 	client.Use(hook.On(exampleHook(), ent.OpUpdate|ent.OpUpdateOne))
 }

@@ -9,7 +9,6 @@ import (
 	"entprom/entprom"
 
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -41,10 +40,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	// Create Ent client and migrate
 	client = createEntClientAndMigrate()
-	// Define const labels with our metrics
-	constLabels := prometheus.Labels{"environment": "blog"}
 	// Use the hook
-	client.Use(entprom.Hook(constLabels))
+	client.Use(entprom.Hook())
 	// Simple handler to run actions on our DB.
 	http.HandleFunc("/", handler)
 	// This endpoint sends metrics to the prometheus to collect
