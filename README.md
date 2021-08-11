@@ -14,6 +14,16 @@ On the second try you'll get an error.
 
 Then, open [localhost:8080/metrics](http://localhost:8080) to see the metrics.
 
+## Running Prometheus
+
+
+```console
+cd ent-prome-example/internal/prometheus
+docker-compose up
+```
+
+then, open [localhost:9090](http://localhost:9090)
+
 ## Join the ent Community
 In order to contribute to `ent`, see the [CONTRIBUTING](https://github.com/ent/ent/blob/master/CONTRIBUTING.md) file for how to go get started.  
 If your company or your product is using `ent`, please let us know by adding yourself to the [ent users page](https://github.com/ent/ent/wiki/ent-users).
