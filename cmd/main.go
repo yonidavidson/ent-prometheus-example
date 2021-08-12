@@ -5,14 +5,12 @@ import (
 	"log"
 	"net/http"
 
+	"entprom"
 	"entprom/ent"
-	"entprom/entprom"
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
-
-var client *ent.Client
 
 func createEntClientAndMigrate() *ent.Client {
 	c, err := ent.Open("sqlite3", "file:ent?mode=memory&cache=shared&_fk=1")
@@ -27,23 +25,25 @@ func createEntClientAndMigrate() *ent.Client {
 	return c
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
-	// Run operations.
-	_, err := client.User.Create().SetName("a8m").Save(ctx)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+func handler(client *ent.Client) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.Background()
+		// Run operations.
+		_, err := client.User.Create().SetName("a8m").Save(ctx)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
 	}
 }
 
 func main() {
 	// Create Ent client and migrate
-	client = createEntClientAndMigrate()
+	client := createEntClientAndMigrate()
 	// Use the hook
 	client.Use(entprom.Hook())
 	// Simple handler to run actions on our DB.
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/", handler(client))
 	// This endpoint sends metrics to the prometheus to collect
 	http.Handle("/metrics", promhttp.Handler())
 	log.Println("server starting on port 8080")
