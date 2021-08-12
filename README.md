@@ -1,4 +1,4 @@
-# ent-entprom-example
+# ent-prometheus-example
 The code for entprom blog post
 
 ## Installation
