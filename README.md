@@ -1,11 +1,11 @@
 # ent-prometheus-example
-The code for entprom blog post
+The code for ent prometheus blog post
 
 ## Installation
 
 ```console
-git@github.com:yonidavidson/ent-entprom-example.git
-cd ent-entprom-example
+git@github.com:yonidavidson/ent-prometheus-example.git
+cd ent-prometheus-example
 go run cmd/main.go
 ```
 
@@ -18,7 +18,7 @@ Then, open [localhost:8080/metrics](http://localhost:8080) to see the metrics.
 
 
 ```console
-cd ent-prome-example/internal/prometheus
+cd ent-prometheus-example/internal/prometheus
 docker-compose up
 ```
 
