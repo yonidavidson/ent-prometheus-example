@@ -12,7 +12,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func createEntClientAndMigrate() *ent.Client {
+func createClient() *ent.Client {
 	c, err := ent.Open("sqlite3", "file:ent?mode=memory&cache=shared&_fk=1")
 	if err != nil {
 		log.Fatalf("failed opening connection to sqlite: %v", err)
@@ -39,7 +39,7 @@ func handler(client *ent.Client) func(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	// Create Ent client and migrate
-	client := createEntClientAndMigrate()
+	client := createClient()
 	// Use the hook
 	client.Use(entprom.Hook())
 	// Simple handler to run actions on our DB.
